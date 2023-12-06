@@ -15,7 +15,7 @@ module TestProf::FactoryProf
           outpath = TestProf.artifact_path("test-prof.result.json")
           File.write(outpath, convert_stats(result, start_time).to_json)
 
-          log :info, "Profiler results JSON generated: #{outpath}"
+          log :info, "Profile results to JSON: #{outpath}"
         end
 
         def convert_stats(result, start_time)
