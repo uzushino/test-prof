@@ -30,7 +30,7 @@ module TestProf::FactoryProf
             stats: result.stats
           }
 
-          File.write(outpath, stats)
+          File.write(outpath, stats.to_json)
 
           log :info, "Profile json generated: #{outpath}"
         end
