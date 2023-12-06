@@ -13,14 +13,19 @@ module TestProf::FactoryProf
           return log(:info, "No factories detected") if result.raw_stats == {}
 
           outpath = TestProf.artifact_path("test-prof.result.json")
+          File.write(outpath, convert_stats(result, start_time).to_json)
 
+          log :info, "Profile json generated: #{outpath}"
+        end
+
+        def convert_stats(result, start_time)
           total_run_time = TestProf.now - start_time
           total_count = result.stats.sum { |stat| stat[:total_count] }
           total_top_level_count = result.stats.sum { |stat| stat[:top_level_count] }
           total_time = result.stats.sum { |stat| stat[:top_level_time] }
           total_uniq_factories = result.stats.map { |stat| stat[:name] }.uniq.count
 
-          stats = {
+          {
             total_count: total_count,
             total_top_level_count: total_top_level_count,
             total_time: total_time.duration,
@@ -29,10 +34,6 @@ module TestProf::FactoryProf
 
             stats: result.stats
           }
-
-          File.write(outpath, stats.to_json)
-
-          log :info, "Profile json generated: #{outpath}"
         end
       end
     end
